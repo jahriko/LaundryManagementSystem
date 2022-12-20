@@ -1,42 +1,31 @@
 package com.mycompany.laundrymanagementsystem;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 
 public class Database {
-        static Connection conn = null;
-        static String url = "jdbc:sqlite:C:\\Users\\Jericho Opsima\\DataGripProjects\\lms-2\\lms.sqlite?foreign_keys=true";
 
-    public static void main(String[] args) {
-        
-        Database.connect();
-                
-    }
+    static String url = "jdbc:sqlite:C:\\Users\\Jericho Opsima\\DataGripProjects\\lms-2\\lms.sqlite?foreign_keys=true";
     
-    public static void connect() {
+    public static Connection connect() {
+        Connection connect = null;
+        
         try {
-            Connection connection = DriverManager.getConnection(url);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select * from employee");
-            
-            while (rs.next()) {
-                System.out.println("first_name: " + rs.getString("first_name"));
-            }
-        } catch (Exception e) {
-            System.out.println("Connection Failed | " + e);
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
+            connect = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         
+        return connect;
+    }
+    
+    public static DSLContext context() {
+        DSLContext context = null;
+        context = DSL.using(connect(), SQLDialect.SQLITE);
+        
+        return context;
     }
 
 }

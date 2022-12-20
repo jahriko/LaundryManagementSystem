@@ -1,12 +1,20 @@
 package com.mycompany.laundrymanagementsystem;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import javax.swing.table.DefaultTableModel;
+import static lms.gen.Tables.LAUNDRY;
+import org.jooq.Record4;
+
 public class Dashboard extends javax.swing.JFrame {
 
     /**
      * Creates new form MainFrame
      */
+    DefaultTableModel dashboardTableModel;
     public Dashboard() {
         initComponents();
+        
+        dashboardTableModel = (DefaultTableModel) dashboardTable.getModel();
     }
 
     /**
@@ -17,61 +25,142 @@ public class Dashboard extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuItem1 = new javax.swing.JMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        dashboardTable = new javax.swing.JTable();
+        newLaundryBtn = new javax.swing.JButton();
+        editBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        refreshBtn = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
+        productMenuItem = new javax.swing.JMenu();
+        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
+        customerMenuItem = new javax.swing.JMenu();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
+        employeeMenuItem = new javax.swing.JMenu();
+        addEmployee = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
+
+        jMenuItem2.setText("jMenuItem2");
+
+        jMenuItem3.setText("jMenuItem3");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        dashboardTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Customer", "Staff", "Date", "Status"
+                "Customer", "Status", "Assigned Employee", "Date"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        jButton1.setText("New Laundry");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(dashboardTable);
 
-        jButton2.setText("Edit ");
+        newLaundryBtn.setText("New Laundry");
+        newLaundryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newLaundryBtnActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Delete");
+        editBtn.setText("Edit ");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("Profit");
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("jLabel2");
+        jButton1.setText("View Stocks");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("Available Machines");
+        refreshBtn.setText("Refresh Data");
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setText("jLabel4");
+        productMenuItem.setText("Products");
 
-        jMenu1.setText("Products");
+        jRadioButtonMenuItem2.setSelected(true);
+        jRadioButtonMenuItem2.setText("Add Product");
+        jRadioButtonMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem2ActionPerformed(evt);
+            }
+        });
+        productMenuItem.add(jRadioButtonMenuItem2);
+
+        jMenuBar1.add(productMenuItem);
+
+        customerMenuItem.setText("Customers");
+        customerMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerMenuItemActionPerformed(evt);
+            }
+        });
+
+        jRadioButtonMenuItem1.setSelected(true);
+        jRadioButtonMenuItem1.setText("Add Customer");
+        jRadioButtonMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem1ActionPerformed(evt);
+            }
+        });
+        customerMenuItem.add(jRadioButtonMenuItem1);
+
+        jMenuBar1.add(customerMenuItem);
+
+        employeeMenuItem.setText("Employee");
+
+        addEmployee.setText("Add Employee");
+        addEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEmployeeActionPerformed(evt);
+            }
+        });
+        employeeMenuItem.add(addEmployee);
+
+        jMenuBar1.add(employeeMenuItem);
+
+        jMenu1.setText("Laundry");
+
+        jMenuItem4.setText("Add Laundry Item");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Customers");
-        jMenuBar1.add(jMenu2);
-
-        jMenu3.setText("Employee");
-        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -82,24 +171,18 @@ public class Dashboard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 951, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(newLaundryBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(editBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4)
-                        .addGap(109, 109, 109)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addGap(69, 69, 69))))
+                        .addComponent(deleteBtn)
+                        .addGap(62, 62, 62)
+                        .addComponent(refreshBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,15 +190,12 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(newLaundryBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))))
+                        .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(refreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -124,7 +204,67 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
+    private void customerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerMenuItemActionPerformed
+
+    }//GEN-LAST:event_customerMenuItemActionPerformed
+
+    private void newLaundryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newLaundryBtnActionPerformed
+        AddLaundry addLaundry = new AddLaundry(this, true);
+        addLaundry.setVisible(true);
+    }//GEN-LAST:event_newLaundryBtnActionPerformed
+
+    private void jRadioButtonMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ActionPerformed
+        Customer customerDialog = new Customer(this, true);
+        customerDialog.setVisible(true);
+    }//GEN-LAST:event_jRadioButtonMenuItem1ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        ClothingPrice laundryItem = new ClothingPrice(this, true);
+        laundryItem.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jRadioButtonMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem2ActionPerformed
+        Product product = new Product(this, true);
+        product.setVisible(true);
+    }//GEN-LAST:event_jRadioButtonMenuItem2ActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+//        populateTable();
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void addEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeActionPerformed
+        Employee emp = new Employee(this, true);
+        emp.setVisible(true);
+    }//GEN-LAST:event_addEmployeeActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+//        Stocks stk = new Stocks(this, true);
+//        stk.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        dashboardTableModel.setRowCount(0);
+        
+        var res = Database.context()
+                .select(LAUNDRY.CUSTOMER_ID, 
+                        LAUNDRY.PAYMENT_STATUS, 
+                        LAUNDRY.ASSIGNED_EMPLOYEE_ID, 
+                        LAUNDRY.DATE_ADDED)
+                .from(LAUNDRY)
+                .fetch();
+        
+        var rowData = new Object[4];
+        
+        for (Record4<Integer, Integer, Integer, String> r : res) {
+            rowData[0] = r.get(LAUNDRY.CUSTOMER_ID);
+            rowData[1] = r.get(LAUNDRY.PAYMENT_STATUS);
+            rowData[2] = r.get(LAUNDRY.ASSIGNED_EMPLOYEE_ID);
+            rowData[3] = r.get(LAUNDRY.DATE_ADDED);
+            dashboardTableModel.addRow(rowData);
+        }
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    /** 
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -151,6 +291,8 @@ public class Dashboard extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        
+        FlatIntelliJLaf.setup();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -161,19 +303,25 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addEmployee;
+    private javax.swing.JMenu customerMenuItem;
+    private javax.swing.JTable dashboardTable;
+    private javax.swing.JButton deleteBtn;
+    private javax.swing.JButton editBtn;
+    private javax.swing.JMenu employeeMenuItem;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton newLaundryBtn;
+    private javax.swing.JMenu productMenuItem;
+    private javax.swing.JButton refreshBtn;
     // End of variables declaration//GEN-END:variables
 }
