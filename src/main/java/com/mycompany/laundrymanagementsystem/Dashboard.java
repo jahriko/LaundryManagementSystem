@@ -64,7 +64,7 @@ public class Dashboard extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Customer", "Status", "Assigned Employee", "Date"
+                "Customer", "Status", "Assigned Employee", "Delivery Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -249,17 +249,17 @@ public class Dashboard extends javax.swing.JFrame {
                 .select(LAUNDRY.CUSTOMER_ID, 
                         LAUNDRY.PAYMENT_STATUS, 
                         LAUNDRY.ASSIGNED_EMPLOYEE_ID, 
-                        LAUNDRY.DATE_ADDED)
+                        LAUNDRY.DELIVERY_DATE)
                 .from(LAUNDRY)
                 .fetch();
         
         var rowData = new Object[4];
         
-        for (Record4<Integer, Integer, Integer, String> r : res) {
+        for (Record4<Integer, String, Integer, String> r : res) {
             rowData[0] = r.get(LAUNDRY.CUSTOMER_ID);
             rowData[1] = r.get(LAUNDRY.PAYMENT_STATUS);
             rowData[2] = r.get(LAUNDRY.ASSIGNED_EMPLOYEE_ID);
-            rowData[3] = r.get(LAUNDRY.DATE_ADDED);
+            rowData[3] = r.get(LAUNDRY.DELIVERY_DATE);
             dashboardTableModel.addRow(rowData);
         }
     }//GEN-LAST:event_refreshBtnActionPerformed

@@ -4,7 +4,10 @@
  */
 package com.mycompany.laundrymanagementsystem;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.swing.JOptionPane;
 import static lms.gen.Tables.LAUNDRY_PRICE;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +28,7 @@ public class ClothingPrice extends javax.swing.JDialog {
     public ClothingPrice(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-//        populateTable();
+        populateTable();
         setLocationRelativeTo(null);
     }
     
@@ -61,14 +64,16 @@ public class ClothingPrice extends javax.swing.JDialog {
         
         var rowData = new Object[5];
         
-        for (Record r : res) {
-            rowData[0] = r.get(LAUNDRY_PRICE.LAUNDRY_TYPE);
-            rowData[1] = r.getValue("LAUNDRY");
-            rowData[2] = r.getValue("LAUNDRY AND IRONING");
-            rowData[3] = r.getValue("IRONING");
-            rowData[4] = r.getValue("DRYWASH");
-            table.addRow(rowData);
-        }
+  
+        
+//        for (Record r : res) {
+//            rowData[0] = r.get(LAUNDRY_PRICE.LAUNDRY_TYPE);
+//            rowData[1] = BigDecimal.valueOf((r.getValue("LAUNDRY")).setScale(2, RoundingMode.HALF_DOWN).floatValue();
+//            rowData[2] = r.getValue("LAUNDRY AND IRONING");
+//            rowData[3] = r.getValue("IRONING");
+//            rowData[4] = BigDecimal.valueOf((Float)r.getValue("DRYWASH")).setScale(2, RoundingMode.HALF_DOWN).floatValue();
+//            table.addRow(rowData);
+//        }
     }
 
     /**
@@ -250,17 +255,27 @@ public class ClothingPrice extends javax.swing.JDialog {
                         .where(LAUNDRY_PRICE.LAUNDRY_TYPE.eq(clothingTypeField.getText())));  
 
         if (!isClothingTypeExist) {
-            Database.context().batch(Database.context().insertInto(
-                    LAUNDRY_PRICE, 
-                    LAUNDRY_PRICE.LAUNDRY_TYPE, 
-                    LAUNDRY_PRICE.SERVICE_NAME, 
+            Database.context().insertInto(LAUNDRY_PRICE,
+                    LAUNDRY_PRICE.LAUNDRY_TYPE,
+                    LAUNDRY_PRICE.SERVICE_NAME,
                     LAUNDRY_PRICE.PRICE)
-                    .values(null, null, (Integer) null )
-                    .bind(clothingTypeField.getText(), "Laundry", getLaundryPrice)
-                    .bind(clothingTypeField.getText(), "Laundry and Ironing", getLaundryIroningPrice)
-                    .bind(clothingTypeField.getText(), "Ironing", getIroningPrice)
-                    .bind(clothingTypeField.getText(), "Drywash", getDrywashPrice)
-                    .execute());
+                    .values(clothingTypeField.getText(), "Laundry", getLaundryPrice)
+                    .values(clothingTypeField.getText(), "Laundry and Ironing", getLaundryIroningPrice)
+                    .values(clothingTypeField.getText(), "Ironing", getIroningPrice)
+                    .values(clothingTypeField.getText(), "Drywash", getDrywashPrice)
+                    .execute();
+
+//            Database.context().batch(Database.context().insertInto(
+//                    LAUNDRY_PRICE, 
+//                    LAUNDRY_PRICE.LAUNDRY_TYPE, 
+//                    LAUNDRY_PRICE.SERVICE_NAME, 
+//                    LAUNDRY_PRICE.PRICE)
+//                    .values(null, null, (Float) null )
+//                    .bind(clothingTypeField.getText(), "Laundry, getLaundryPrice)
+//                    .bind(clothingTypeField.getText(), "Laundry and Ironing", getLaundryIroningPrice)
+//                    .bind(clothingTypeField.getText(), "Ironing", getIroningPrice)
+//                    .bind(clothingTypeField.getText(), "Drywash", getDrywashPrice)
+//                    .execute());
         
             populateTable();
         }

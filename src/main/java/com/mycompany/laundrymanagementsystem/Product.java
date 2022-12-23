@@ -41,7 +41,7 @@ public class Product extends javax.swing.JDialog {
             rowData[0] = r.get(PRODUCT.PRODUCT_ID);
             rowData[1] = r.get(PRODUCT.PRODUCT_NAME);
             rowData[2] = r.get(PRODUCT.UNIT_PRICE);
-            rowData[3] = r.get(PRODUCT.QUANTITY);
+            rowData[3] = r.get(PRODUCT.STOCK_QUANTITY);
             table.addRow(rowData);
         }
     }
@@ -200,7 +200,7 @@ public class Product extends javax.swing.JDialog {
                     PRODUCT,
                     PRODUCT.PRODUCT_NAME,
                     PRODUCT.UNIT_PRICE,
-                    PRODUCT.QUANTITY).values(
+                    PRODUCT.STOCK_QUANTITY).values(
                             productNameField.getText(),
                             getPrice,
                             getQuantity

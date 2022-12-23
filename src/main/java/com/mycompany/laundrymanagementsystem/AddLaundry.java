@@ -4,12 +4,15 @@
  */
 package com.mycompany.laundrymanagementsystem;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import static java.lang.Float.parseFloat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +26,9 @@ import static lms.gen.Tables.PRODUCT;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jooq.Result;
 import org.jooq.Record;
+import org.jooq.*;
+import org.jooq.impl.*;
+import static org.jooq.impl.DSL.*;
 import org.jooq.Record1;
 import org.jooq.TableField;
 /**
@@ -93,10 +99,6 @@ public class AddLaundry extends javax.swing.JDialog {
             customerDropdown.addItem((String) r.get(CUSTOMER.CUSTOMER_NAME));
         }
     }
-    
-    private void populateDashboardTable() {
-        
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -144,6 +146,8 @@ public class AddLaundry extends javax.swing.JDialog {
         paymentHistoryBtn = new javax.swing.JButton();
         amountTenderedField = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -279,8 +283,14 @@ public class AddLaundry extends javax.swing.JDialog {
 
         productQuantitySpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
+        dateInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateInputActionPerformed(evt);
+            }
+        });
+
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel11.setText("Date");
+        jLabel11.setText("Delivery Date");
 
         paymentHistoryBtn.setText("View Payment History");
         paymentHistoryBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -307,91 +317,102 @@ public class AddLaundry extends javax.swing.JDialog {
             }
         });
 
+        jLabel12.setText("jLabel12");
+
+        jLabel14.setText("jLabel14");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(56, 56, 56)
-                                .addComponent(customerDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addGap(18, 18, 18)
-                                .addComponent(employeeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(productItemDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(productQuantitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(addProductItemBtn)
-                                .addGap(18, 18, 18)
-                                .addComponent(removeProductItemBtn))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(18, 18, 18)
-                                .addComponent(paymentStatusDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(paymentHistoryBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(laundryTypeDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(laundryQuantitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13)
-                            .addComponent(serviceDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(52, 52, 52)
-                        .addComponent(addClothingBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(removeLaundryItemBtn))
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addLaundryBtn)
-                        .addGap(27, 27, 27)
-                        .addComponent(cancelBtn))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(totalAmountLabel))
                         .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(amountTenderedField))
-                        .addGap(45, 45, 45)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(changeLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(refresh)
-                                .addGap(94, 94, 94)
-                                .addComponent(jLabel10))
-                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(deliveryDropdown, 0, 121, Short.MAX_VALUE)
-                            .addComponent(dateInput))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(56, 56, 56)
+                                        .addComponent(customerDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(employeeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(productItemDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(productQuantitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(addProductItemBtn)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(removeProductItemBtn))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(paymentStatusDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(paymentHistoryBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(laundryTypeDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(laundryQuantitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel13)
+                                    .addComponent(serviceDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(52, 52, 52)
+                                .addComponent(addClothingBtn)
+                                .addGap(18, 18, 18)
+                                .addComponent(removeLaundryItemBtn))
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addGap(228, 228, 228)
+                                .addComponent(addLaundryBtn)
+                                .addGap(27, 27, 27)
+                                .addComponent(cancelBtn))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(totalAmountLabel))
+                                .addGap(41, 41, 41)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(amountTenderedField))
+                                .addGap(45, 45, 45)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(changeLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(refresh)
+                                        .addGap(94, 94, 94)
+                                        .addComponent(jLabel10))
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(deliveryDropdown, 0, 121, Short.MAX_VALUE)
+                                    .addComponent(dateInput)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(204, 204, 204)
+                        .addComponent(jLabel12)))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -481,14 +502,16 @@ public class AddLaundry extends javax.swing.JDialog {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(changeLabel)
                                             .addComponent(amountTenderedField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE))
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(refresh)
                         .addGap(80, 80, 80)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addLaundryBtn)
-                    .addComponent(cancelBtn))
+                    .addComponent(cancelBtn)
+                    .addComponent(jLabel14))
                 .addGap(40, 40, 40))
         );
 
@@ -565,41 +588,35 @@ public class AddLaundry extends javax.swing.JDialog {
         totalAmountLabel.setText(String.valueOf(getTotal));
     }//GEN-LAST:event_addProductItemBtnActionPerformed
 
-    private void addLaundryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLaundryBtnActionPerformed
-        
-        // CUSTOMER
-        // ================================================================================
+    private int getCustomerIDFromDropdown() {
         var getCustomer = customerDropdown.getSelectedItem().toString();
         var getCustomerID = Database.context()
                 .select(CUSTOMER.CUSTOMER_ID)
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NAME.eq(getCustomer))
                 .fetchSingle();
-        
-        var extractCustomerID = getCustomerID.get(CUSTOMER.CUSTOMER_ID);
-        // ================================================================================
-        
-        
-        // EMPLOYEE
-        // ================================================================================
+
+        return getCustomerID.get(CUSTOMER.CUSTOMER_ID);
+    }
+    
+    private int getEmployeeIDFromDropdown() {
         var getEmployeeFromDropdown = employeeDropdown.getSelectedItem().toString();
         var getEmployeeID = Database.context()
                 .select(EMPLOYEE.EMPLOYEE_ID)
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NAME.eq(getEmployeeFromDropdown))
                 .fetchSingle();
-        
-        var extractEmployeeID = getCustomerID.get(CUSTOMER.CUSTOMER_ID);
-        // ================================================================================
 
-        
-        var paymentStatus = paymentStatusDropdown.getSelectedIndex();
+        return getEmployeeID.get(EMPLOYEE.EMPLOYEE_ID);
+    }
+    
+    private void addLaundryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLaundryBtnActionPerformed
+
+        var paymentStatus = paymentStatusDropdown.getSelectedItem().toString();
         var totalAmount = parseFloat(totalAmountLabel.getText());
         var amountTendered = parseFloat(amountTenderedField.getText());
         var deliveryMethod = (String) deliveryDropdown.getSelectedItem();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = new Date();
-        var dateAdded = formatter.format(date);
+        var deliveryDate = dateInput.getText();
         
         // Add Laundry Order to Database
         Database.context()
@@ -609,77 +626,93 @@ public class AddLaundry extends javax.swing.JDialog {
                         LAUNDRY.ASSIGNED_EMPLOYEE_ID,
                         LAUNDRY.AMOUNT_TENDERED,
                         LAUNDRY.TOTAL_AMOUNT,
-                        LAUNDRY.DATE_ADDED,
+                        LAUNDRY.DELIVERY_DATE,
                         LAUNDRY.PAYMENT_STATUS,
                         LAUNDRY.DELIVERY_METHOD)
-                .values(extractCustomerID, extractEmployeeID, amountTendered, totalAmount, dateAdded, paymentStatus, deliveryMethod)
+                .values(getCustomerIDFromDropdown(), getEmployeeIDFromDropdown(), amountTendered, totalAmount, deliveryDate, paymentStatus, deliveryMethod)
                 .execute();
         
-        
         //  ==============================Add the rows from two tables in the database==============================
+
+        addClothingRowsToDatabase();
         
-        
+        addProductRowsToDatabase();
+
+//        updateProductStock();
+
+    }//GEN-LAST:event_addLaundryBtnActionPerformed
+
+    
+    private void addClothingRowsToDatabase() {
         // ====================
         // Clothing Type Table 
         // ====================
         int clothingItemRowCount = clothingItemTable.getRowCount();
-        
+
+        int getLaundryID = Database.context()
+                .select(LAUNDRY.LAUNDRY_ID)
+                .from(LAUNDRY)
+                .orderBy(LAUNDRY.LAUNDRY_ID.desc())
+                .limit(1)
+                .fetchOne()
+                .get(LAUNDRY.LAUNDRY_ID);
+
+        int storeLaundryID = getLaundryID;
+
         for (int row = 0; row < clothingItemRowCount; row++) {
             List<Object> rowData = new ArrayList<>();
-            for (int column = 0; column < clothingItemTable.getColumnCount(); column++) {
-                //Get and add Laundry ID
-                rowData.add((int) Database.context()
-                        .select(LAUNDRY.LAUNDRY_ID)
-                        .from(LAUNDRY)
-                        .orderBy(LAUNDRY.LAUNDRY_ID.desc())
-                        .fetchOne()
-                        .get(LAUNDRY.LAUNDRY_ID));
-                
-                rowData.add(clothingItemTable.getValueAt(row, column));
-            }
+
+            var clothingType = clothingItemTable.getValueAt(row, 0);
+            var service = clothingItemTable.getValueAt(row, 1);
+            var quantity = clothingItemTable.getValueAt(row, 2);
+            var total = clothingItemTable.getValueAt(row, 3);
+
+            rowData.add(quantity);
+            rowData.add(storeLaundryID);
+            rowData.add(total);
+            rowData.add(clothingType);
+            rowData.add(service);
+
             Database.context().insertInto(CLOTHING_ITEMS).values(rowData).execute();
         }
-
+    }
+    
+    private void addProductRowsToDatabase() {
         // ====================
         // Product Item Table   
         // ====================
-        int productRowCount = productTableModel.getRowCount();
         
-        for (int row = 0; row < productRowCount; row++) {
+        int getLaundryID = Database.context()
+                .select(LAUNDRY.LAUNDRY_ID)
+                .from(LAUNDRY)
+                .orderBy(LAUNDRY.LAUNDRY_ID.desc())
+                .limit(1)
+                .fetchOne()
+                .get(LAUNDRY.LAUNDRY_ID);
+
+        int storeLaundryID = getLaundryID;
+        int productItemRowCount = productTableModel.getRowCount();
+
+        for (int row = 0; row < productItemRowCount; row++) {
             List<Object> rowData = new ArrayList<>();
-            for (int column = 0; column < productTableModel.getColumnCount(); column++) {
-                //Get Laundry ID
-                rowData.add((int) Database.context().select(LAUNDRY.LAUNDRY_ID).from(LAUNDRY).orderBy(LAUNDRY.LAUNDRY_ID.desc()).fetchOne().get(LAUNDRY.LAUNDRY_ID));
-                
-                rowData.add(productTable.getValueAt(row, column));
-            }
+
+            String product = productTable.getValueAt(row, 0).toString();
+            int quantity = (int) productTable.getValueAt(row, 1);
+            var total = productTable.getValueAt(row, 2);
+
+            rowData.add(storeLaundryID);
+            rowData.add(quantity);
+            rowData.add(total);
+            rowData.add(product);
+
             Database.context().insertInto(PRODUCT_ITEMS).values(rowData).execute();
+                        
+            if_(PRODUCT.STOCK_QUANTITY.greaterThan(quantity), 
+                    Database.context().update(PRODUCT).set(PRODUCT.STOCK_QUANTITY, (int)quantity).where(PRODUCT.PRODUCT_NAME.eq(product)).execute(), // If true
+                    0); //If false
         }
-        
-        //Populate Laundry Table
-//        populateLaundryTable();
-        
-        
-        // Reduce quantitty
-        
-        Record1<Integer> getCurrentQuantity = Database.context().select(PRODUCT.QUANTITY).from(PRODUCT).fetchOne();
-        
-        int productStockQuantity = getCurrentQuantity.get(0, int.class);
-        
-        if (productStockQuantity > 0) {
-
-            int quantity = (Integer) laundryQuantitySpinner.getValue();
-            if (quantity > productStockQuantity)
-
-            Database.context().update(PRODUCT).set(PRODUCT.QUANTITY, productStockQuantity - quantity).execute();            
-        } else {
-            JOptionPane.showMessageDialog(this, "Not Enough Stocks.");
-        }
-        
-
-
-    }//GEN-LAST:event_addLaundryBtnActionPerformed
-
+    }
+    
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cancelBtnActionPerformed
@@ -694,13 +727,17 @@ public class AddLaundry extends javax.swing.JDialog {
     }//GEN-LAST:event_amountTenderedFieldMouseExited
 
     private void amountTenderedFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_amountTenderedFieldFocusLost
-        var getTotal = parseFloat(totalAmountLabel.getText()) - parseFloat(amountTenderedField.getText());
+        var getTotal =  parseFloat(amountTenderedField.getText()) - parseFloat(totalAmountLabel.getText());
         changeLabel.setText(String.valueOf(getTotal));
     }//GEN-LAST:event_amountTenderedFieldFocusLost
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_refreshActionPerformed
+
+    private void dateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateInputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -759,7 +796,9 @@ public class AddLaundry extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
